@@ -1,6 +1,6 @@
 'use strict';
 
-var constants = require('byteballcore/constants.js');
+var constants = require('GAEAcore/constants.js');
 
 angular.module('copayApp.services').factory('txFormatService', function(profileService, configService, lodash) {
   var root = {};

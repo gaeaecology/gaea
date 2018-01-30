@@ -1,16 +1,16 @@
 'use strict';
 
-var constants = require('byteballcore/constants.js');
-var eventBus = require('byteballcore/event_bus.js');
-var ValidationUtils = require('byteballcore/validation_utils.js');
-var objectHash = require('byteballcore/object_hash.js');
+var constants = require('GAEAcore/constants.js');
+var eventBus = require('GAEAcore/event_bus.js');
+var ValidationUtils = require('GAEAcore/validation_utils.js');
+var objectHash = require('GAEAcore/object_hash.js');
 
 angular.module('copayApp.services').factory('correspondentListService', function($state, $rootScope, $sce, $compile, configService, storageService, profileService, go, lodash, $stickyState, $deepStateRedirect, $timeout, gettext) {
 	var root = {};
-	var device = require('byteballcore/device.js');
-	var wallet = require('byteballcore/wallet.js');
+	var device = require('GAEAcore/device.js');
+	var wallet = require('GAEAcore/wallet.js');
 
-	var chatStorage = require('byteballcore/chat_storage.js');
+	var chatStorage = require('GAEAcore/chat_storage.js');
 	$rootScope.newMessagesCount = {};
 	$rootScope.newMsgCounterEnabled = false;
 
@@ -36,7 +36,7 @@ angular.module('copayApp.services').factory('correspondentListService', function
 	}, true);
 	
 	function addIncomingMessageEvent(from_address, body, message_counter){
-		var walletGeneral = require('byteballcore/wallet_general.js');
+		var walletGeneral = require('GAEAcore/wallet_general.js');
 		walletGeneral.readMyAddresses(function(arrMyAddresses){
 			body = highlightActions(escapeHtml(body), arrMyAddresses);
 			body = text2html(body);
@@ -98,7 +98,7 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		messages.push(msg_obj);
 	}
 	
-	var payment_request_regexp = /\[.*?\]\(byteball:([0-9A-Z]{32})\?([\w=&;+%]+)\)/g; // payment description within [] is ignored
+	var payment_request_regexp = /\[.*?\]\(GAEA:([0-9A-Z]{32})\?([\w=&;+%]+)\)/g; // payment description within [] is ignored
 	
 	function highlightActions(text, arrMyAddresses){
 		return text.replace(/\b[2-7A-Z]{32}\b(?!(\?(amount|asset|device_address)|"))/g, function(address){
@@ -265,7 +265,7 @@ angular.module('copayApp.services').factory('correspondentListService', function
 	}
 	
 	function parsePaymentRequestQueryString(query_string){
-		var URI = require('byteballcore/uri.js');
+		var URI = require('GAEAcore/uri.js');
 		var assocParams = URI.parseQueryString(query_string, '&amp;');
 		var strAmount = assocParams['amount'];
 		if (!strAmount)
@@ -444,7 +444,7 @@ angular.module('copayApp.services').factory('correspondentListService', function
 			for (var i in messages) {
 				messages[i] = parseMessage(messages[i]);
 			}
-			var walletGeneral = require('byteballcore/wallet_general.js');
+			var walletGeneral = require('GAEAcore/wallet_general.js');
 			walletGeneral.readMyAddresses(function(arrMyAddresses){
 				if (messages.length < limit)
 					historyEndForCorrespondent[correspondent.device_address] = true;

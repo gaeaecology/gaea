@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.byteball.wallet"
+<widget id="org.GAEA.wallet"
   version="2.1.0"
   android-versionCode="1062"
   ios-CFBundleVersion="2.1.0">
-    <name>Byteball</name>
+    <name>GAEA</name>
     <description>
-      Byteball wallet.
+      GAEA wallet.
     </description>
-    <author email="byteball@byteball.org" href="https://byteball.org">
-        Byteball
+    <author email="GAEA@GAEA.org" href="https://GAEA.org">
+        GAEA
     </author>
     <content src="index.html" />
     <access origin="*" />

@@ -1,17 +1,17 @@
 'use strict';
 
-var constants = require('byteballcore/constants.js');
-var eventBus = require('byteballcore/event_bus.js');
-var breadcrumbs = require('byteballcore/breadcrumbs.js');
-var ValidationUtils = require('byteballcore/validation_utils.js');
+var constants = require('GAEAcore/constants.js');
+var eventBus = require('GAEAcore/event_bus.js');
+var breadcrumbs = require('GAEAcore/breadcrumbs.js');
+var ValidationUtils = require('GAEAcore/validation_utils.js');
 
 angular.module('copayApp.controllers')
 	.controller('walletHomeController', function($scope, $rootScope, $timeout, $filter, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, addressbookService, correspondentListService, newVersion, autoUpdatingWitnessesList) {
 
 		var self = this;
 		var home = this;
-		var conf = require('byteballcore/conf.js');
-		var chatStorage = require('byteballcore/chat_storage.js');
+		var conf = require('GAEAcore/conf.js');
+		var chatStorage = require('GAEAcore/chat_storage.js');
 		this.protocol = conf.program;
 		$rootScope.hideMenuBar = false;
 		$rootScope.wpInputFocused = false;
@@ -19,7 +19,7 @@ angular.module('copayApp.controllers')
 		var configWallet = config.wallet;
 		var indexScope = $scope.index;
 		$scope.currentSpendUnconfirmed = configWallet.spendUnconfirmed;
-		var network = require('byteballcore/network.js');
+		var network = require('GAEAcore/network.js');
 
 		// INIT
 		var walletSettings = configWallet.settings;
@@ -50,7 +50,7 @@ angular.module('copayApp.controllers')
 			if (form.address && form.address.$invalid && !self.blockUx) {
 				console.log("invalid address, resetting form");
 				self.resetForm();
-				self.error = gettext('Could not recognize a valid Byteball QR Code');
+				self.error = gettext('Could not recognize a valid GAEA QR Code');
 			}
 		});
 
@@ -287,8 +287,8 @@ angular.module('copayApp.controllers')
 				$scope.address = address;
 				$scope.shared_address_cosigners = indexScope.shared_address_cosigners;
 
-				var walletGeneral = require('byteballcore/wallet_general.js');
-				var walletDefinedByAddresses = require('byteballcore/wallet_defined_by_addresses.js');
+				var walletGeneral = require('GAEAcore/wallet_general.js');
+				var walletDefinedByAddresses = require('GAEAcore/wallet_defined_by_addresses.js');
 				walletGeneral.readMyAddresses(function(arrMyAddresses) {
 					walletDefinedByAddresses.readSharedAddressDefinition(address, function(arrDefinition, creation_ts) {
 						walletDefinedByAddresses.readSharedAddressPeerAddresses(address, function(arrPeerAddresses) {
@@ -526,7 +526,7 @@ angular.module('copayApp.controllers')
 		};
 
 		function claimTextCoin(mnemonic, addr) {
-			var wallet = require('byteballcore/wallet.js');
+			var wallet = require('GAEAcore/wallet.js');
 			wallet.receiveTextCoin(mnemonic, addr, function(err, unit, asset) {
 				$rootScope.$emit('closeModal');
 				if (err) {
@@ -735,8 +735,8 @@ angular.module('copayApp.controllers')
 				}
 			}
 			return {
-				message: "Here is your link to receive " + amount + " " + asset + usd_amount_str +": https://byteball.org/openapp.html#textcoin?" + mnemonic,
-				subject: "Byteball user beamed you money"
+				message: "Here is your link to receive " + amount + " " + asset + usd_amount_str +": https://GAEA.org/openapp.html#textcoin?" + mnemonic,
+				subject: "GAEA user beamed you money"
 			}
 		}
 
@@ -830,7 +830,7 @@ angular.module('copayApp.controllers')
 				return self.setSendError(gettext(msg));
 			}
 
-			var wallet = require('byteballcore/wallet.js');
+			var wallet = require('GAEAcore/wallet.js');
 			var assetInfo = $scope.index.arrBalances[$scope.index.assetIndex];
 			var asset = assetInfo.asset;
 			console.log("asset " + asset);
@@ -897,17 +897,17 @@ angular.module('copayApp.controllers')
 						return;
 					}
 
-					var device = require('byteballcore/device.js');
+					var device = require('GAEAcore/device.js');
 					if (self.binding) {
 						if (isTextcoin) {
 							delete self.current_payment_key;
 							indexScope.setOngoingProcess(gettext('sending'), false);
-							return self.setSendError("you can send bound payments to byteball adresses only");
+							return self.setSendError("you can send bound payments to GAEA adresses only");
 						}
 						if (!recipient_device_address)
 							throw Error('recipient device address not known');
-						var walletDefinedByAddresses = require('byteballcore/wallet_defined_by_addresses.js');
-						var walletDefinedByKeys = require('byteballcore/wallet_defined_by_keys.js');
+						var walletDefinedByAddresses = require('GAEAcore/wallet_defined_by_addresses.js');
+						var walletDefinedByKeys = require('GAEAcore/wallet_defined_by_keys.js');
 						var my_address;
 						// never reuse addresses as the required output could be already present
 						useOrIssueNextAddress(fc.credentials.walletId, 0, function(addressInfo) {
@@ -1071,7 +1071,7 @@ angular.module('copayApp.controllers')
 								if (binding && binding.reverseAmount) { // create a request for reverse payment
 									if (!my_address)
 										throw Error('my address not known');
-									var paymentRequestCode = 'byteball:' + my_address + '?amount=' + binding.reverseAmount + '&asset=' + encodeURIComponent(binding.reverseAsset);
+									var paymentRequestCode = 'GAEA:' + my_address + '?amount=' + binding.reverseAmount + '&asset=' + encodeURIComponent(binding.reverseAsset);
 									var paymentRequestText = '[reverse payment](' + paymentRequestCode + ')';
 									device.sendMessageToDevice(recipient_device_address, 'text', paymentRequestText);
 									var body = correspondentListService.formatOutgoingMessage(paymentRequestText);
@@ -1142,7 +1142,7 @@ angular.module('copayApp.controllers')
 		}
 
 		this.submitData = function() {
-			var objectHash = require('byteballcore/object_hash.js');
+			var objectHash = require('GAEAcore/object_hash.js');
 			var fc = profileService.focusedClient;
 			var value = {};
 			var app;
@@ -1514,7 +1514,7 @@ angular.module('copayApp.controllers')
 
 		this.setFromUri = function(uri) {
 			var objRequest;
-			require('byteballcore/uri.js')
+			require('GAEAcore/uri.js')
 				.parseUri(uri, {
 					ifError: function(err) {},
 					ifOk: function(_objRequest) {
@@ -1581,7 +1581,7 @@ angular.module('copayApp.controllers')
 
 				$scope.eraseTextcoin = function() {
 					(function(){
-						var wallet = require('byteballcore/wallet.js');
+						var wallet = require('GAEAcore/wallet.js');
 						var ModalInstanceCtrl = function($scope, $modalInstance, $sce) {
 							$scope.title = $sce.trustAsHtml(gettextCatalog.getString('Deleting the textcoin will remove the ability to claim it back or resend'));
 							$scope.cancel_button_class = 'light-gray outline';
@@ -1626,7 +1626,7 @@ angular.module('copayApp.controllers')
 
 				$scope.openInExplorer = function() {
 					var testnet = home.isTestnet ? 'testnet' : '';
-					var url = 'https://' + testnet + 'explorer.byteball.org/#' + btx.unit;
+					var url = 'https://' + testnet + 'explorer.GAEA.org/#' + btx.unit;
 					if (typeof nw !== 'undefined')
 						nw.Shell.openExternal(url);
 					else if (isCordova)
@@ -1643,9 +1643,9 @@ angular.module('copayApp.controllers')
 				};
 
 				$scope.reSendPrivateMultiSigPayment = function() {
-					var indivisible_asset = require('byteballcore/indivisible_asset');
-					var wallet_defined_by_keys = require('byteballcore/wallet_defined_by_keys');
-					var walletDefinedByAddresses = require('byteballcore/wallet_defined_by_addresses');
+					var indivisible_asset = require('GAEAcore/indivisible_asset');
+					var wallet_defined_by_keys = require('GAEAcore/wallet_defined_by_keys');
+					var walletDefinedByAddresses = require('GAEAcore/wallet_defined_by_addresses');
 					var fc = profileService.focusedClient;
 
 					function success() {
@@ -1717,8 +1717,8 @@ angular.module('copayApp.controllers')
 				};
 
 				$scope.sendPrivatePayments = function(correspondent) {
-					var indivisible_asset = require('byteballcore/indivisible_asset');
-					var wallet_general = require('byteballcore/wallet_general');
+					var indivisible_asset = require('GAEAcore/indivisible_asset');
+					var wallet_general = require('GAEAcore/wallet_general');
 					indivisible_asset.restorePrivateChains(btx.asset, btx.unit, btx.addressTo, function(arrRecipientChains, arrCosignerChains) {
 						wallet_general.sendPrivatePayments(correspondent.device_address, arrRecipientChains, true, null, function() {
 							modalInstance.dismiss('cancel');
