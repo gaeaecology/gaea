@@ -2,7 +2,7 @@ GAEA is a wallet for storage and transfer of decentralized value.  See [GAEA.IO]
 
 ## Binary Downloads
 
-[GAEA.io](https://GAEA.io/)
+[GAEA.IO](https://GAEA.io/)
 
 ## Main Features
 
